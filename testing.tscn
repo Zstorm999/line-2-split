@@ -1,0 +1,85 @@
+[gd_scene load_steps=17 format=3 uid="uid://bspbflxiwo7o0"]
+
+[ext_resource type="Shader" uid="uid://dwh0rhx2737yq" path="res://bi-textured.gdshader" id="1_qrja6"]
+[ext_resource type="Texture2D" uid="uid://btck3o5xhco48" path="res://Assets/Materials/stonebrick_wall_001/stone_brick_wall_001_diff_1k.png" id="2_kj3p2"]
+[ext_resource type="Texture2D" uid="uid://bifj12lepegrn" path="res://Assets/Materials/stonebrick_wall_001/stone_brick_wall_001_nor_gl_1k.jpg" id="3_lc7k4"]
+[ext_resource type="Texture2D" uid="uid://5w3pxbchq0qd" path="res://Assets/Materials/plywood/plywood_diff_1k.png" id="3_ybq6y"]
+[ext_resource type="Texture2D" uid="uid://dphubysdtdruo" path="res://Assets/Materials/stonebrick_wall_001/stone_brick_wall_001_rough_1k.png" id="4_jn4p2"]
+[ext_resource type="Texture2D" uid="uid://b3tq4oqmdu75d" path="res://Assets/Materials/plywood/plywood_nor_gl_1k.png" id="5_11ixh"]
+[ext_resource type="Texture2D" uid="uid://yp3nasxrbo3h" path="res://Assets/Materials/plywood/plywood_rough_1k.png" id="7_w078t"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_feb8i"]
+
+[sub_resource type="Sky" id="Sky_kj3p2"]
+sky_material = SubResource("ProceduralSkyMaterial_feb8i")
+
+[sub_resource type="Environment" id="Environment_lc7k4"]
+background_mode = 2
+sky = SubResource("Sky_kj3p2")
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_ybq6y"]
+noise_type = 4
+fractal_type = 2
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_11ixh"]
+seamless = true
+noise = SubResource("FastNoiseLite_ybq6y")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_co24e"]
+render_priority = 0
+shader = ExtResource("1_qrja6")
+shader_parameter/line_thickness = 0.17
+shader_parameter/sampling_adjustment = 0.55
+shader_parameter/outer_line_color = Color(0.772549, 0.423529, 0.909804, 1)
+shader_parameter/inner_line_color = Color(0.772549, 0.423529, 0.909804, 1)
+shader_parameter/inner_size = 0.005
+shader_parameter/line_noise = SubResource("NoiseTexture2D_11ixh")
+shader_parameter/noise_threshold = 0.915
+shader_parameter/diffuse_a = ExtResource("2_kj3p2")
+shader_parameter/normal_a = ExtResource("3_lc7k4")
+shader_parameter/roughness_a = ExtResource("4_jn4p2")
+shader_parameter/diffuse_b = ExtResource("3_ybq6y")
+shader_parameter/normal_b = ExtResource("5_11ixh")
+shader_parameter/roughness_b = ExtResource("7_w078t")
+shader_parameter/edge0 = 0.01
+shader_parameter/edge1 = 0.03
+
+[sub_resource type="BoxMesh" id="BoxMesh_ybq6y"]
+size = Vector3(5, 10, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_qrja6"]
+render_priority = 0
+shader = ExtResource("1_qrja6")
+shader_parameter/line_thickness = 0.0
+shader_parameter/sampling_adjustment = 0.0
+shader_parameter/outer_line_color = Color(0, 0, 0, 1)
+shader_parameter/inner_line_color = Color(0, 0, 0, 1)
+shader_parameter/inner_size = 0.0
+shader_parameter/noise_threshold = 0.0
+shader_parameter/diffuse_a = ExtResource("3_ybq6y")
+shader_parameter/edge0 = 0.01
+shader_parameter/edge1 = 0.1
+
+[sub_resource type="BoxMesh" id="BoxMesh_feb8i"]
+
+[node name="Testing" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_lc7k4")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.999976, -0.000311482, 0.00690434, 7.47098e-09, 0.998984, 0.0450666, -0.00691139, -0.0450655, 0.99896, 0.0715928, 0.0374153, 0)
+material_override = SubResource("ShaderMaterial_co24e")
+mesh = SubResource("BoxMesh_ybq6y")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.999994, 0, 0.00333354, 0, 1, 0, -0.00333354, 0, 0.999994, 1.35053, 0.228683, -2.77888)
+visible = false
+material_override = SubResource("ShaderMaterial_qrja6")
+mesh = SubResource("BoxMesh_feb8i")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(0.742923, -0.452216, 0.493524, 0, 0.737289, 0.675577, -0.669377, -0.501902, 0.547749, 1.56085, 1.39665, 1.02209)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.606355, 0.506334, 0.613155, 0.363565, -0.509244, 0.780059, 0.707216, 0.695914, 0.124697, -2.79117, 0, 0)
