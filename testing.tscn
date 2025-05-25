@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://bspbflxiwo7o0"]
+[gd_scene load_steps=21 format=3 uid="uid://bspbflxiwo7o0"]
 
 [ext_resource type="Shader" uid="uid://dwh0rhx2737yq" path="res://bi-textured.gdshader" id="1_qrja6"]
 [ext_resource type="Texture2D" uid="uid://btck3o5xhco48" path="res://Assets/Materials/stonebrick_wall_001/stone_brick_wall_001_diff_1k.png" id="2_kj3p2"]
@@ -7,6 +7,9 @@
 [ext_resource type="Texture2D" uid="uid://dphubysdtdruo" path="res://Assets/Materials/stonebrick_wall_001/stone_brick_wall_001_rough_1k.png" id="4_jn4p2"]
 [ext_resource type="Texture2D" uid="uid://b3tq4oqmdu75d" path="res://Assets/Materials/plywood/plywood_nor_gl_1k.png" id="5_11ixh"]
 [ext_resource type="Texture2D" uid="uid://yp3nasxrbo3h" path="res://Assets/Materials/plywood/plywood_rough_1k.png" id="7_w078t"]
+[ext_resource type="PackedScene" uid="uid://bgasv7ymyxed1" path="res://player.tscn" id="8_11ixh"]
+[ext_resource type="Script" uid="uid://chahlilhd7bwx" path="res://line.gd" id="9_20t1u"]
+[ext_resource type="Script" uid="uid://ca4yc5pxocycs" path="res://line_marker.gd" id="9_w078t"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_feb8i"]
 
@@ -17,24 +20,9 @@ sky_material = SubResource("ProceduralSkyMaterial_feb8i")
 background_mode = 2
 sky = SubResource("Sky_kj3p2")
 
-[sub_resource type="FastNoiseLite" id="FastNoiseLite_ybq6y"]
-noise_type = 4
-fractal_type = 2
-
-[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_11ixh"]
-seamless = true
-noise = SubResource("FastNoiseLite_ybq6y")
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_co24e"]
 render_priority = 0
 shader = ExtResource("1_qrja6")
-shader_parameter/line_thickness = 0.17
-shader_parameter/sampling_adjustment = 0.55
-shader_parameter/outer_line_color = Color(0.772549, 0.423529, 0.909804, 1)
-shader_parameter/inner_line_color = Color(0.772549, 0.423529, 0.909804, 1)
-shader_parameter/inner_size = 0.005
-shader_parameter/line_noise = SubResource("NoiseTexture2D_11ixh")
-shader_parameter/noise_threshold = 0.915
 shader_parameter/diffuse_a = ExtResource("2_kj3p2")
 shader_parameter/normal_a = ExtResource("3_lc7k4")
 shader_parameter/roughness_a = ExtResource("4_jn4p2")
@@ -45,22 +33,26 @@ shader_parameter/edge0 = 0.01
 shader_parameter/edge1 = 0.03
 
 [sub_resource type="BoxMesh" id="BoxMesh_ybq6y"]
-size = Vector3(5, 10, 1)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qrja6"]
 render_priority = 0
 shader = ExtResource("1_qrja6")
-shader_parameter/line_thickness = 0.0
-shader_parameter/sampling_adjustment = 0.0
-shader_parameter/outer_line_color = Color(0, 0, 0, 1)
-shader_parameter/inner_line_color = Color(0, 0, 0, 1)
-shader_parameter/inner_size = 0.0
-shader_parameter/noise_threshold = 0.0
 shader_parameter/diffuse_a = ExtResource("3_ybq6y")
 shader_parameter/edge0 = 0.01
 shader_parameter/edge1 = 0.1
 
 [sub_resource type="BoxMesh" id="BoxMesh_feb8i"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_11ixh"]
+render_priority = 0
+shader = ExtResource("1_qrja6")
+shader_parameter/edge0 = 0.01
+shader_parameter/edge1 = 0.1
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ybq6y"]
+size = Vector2(10, 10)
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_ybq6y"]
 
 [node name="Testing" type="Node3D"]
 
@@ -68,18 +60,45 @@ shader_parameter/edge1 = 0.1
 environment = SubResource("Environment_lc7k4")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.999976, -0.000311482, 0.00690434, 7.47098e-09, 0.998984, 0.0450666, -0.00691139, -0.0450655, 0.99896, 0.0715928, 0.0374153, 0)
+transform = Transform3D(0.999976, -0.000311482, 0.00690434, 7.47098e-09, 0.998984, 0.0450666, -0.00691139, -0.0450655, 0.99896, 0, 0.581706, -2.12715)
 material_override = SubResource("ShaderMaterial_co24e")
 mesh = SubResource("BoxMesh_ybq6y")
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
-transform = Transform3D(0.999994, 0, 0.00333354, 0, 1, 0, -0.00333354, 0, 0.999994, 1.35053, 0.228683, -2.77888)
-visible = false
+transform = Transform3D(0.999994, 0, 0.00333354, 0, 1, 0, -0.00333354, 0, 0.999994, 0.315423, 0.9474, -3.57157)
 material_override = SubResource("ShaderMaterial_qrja6")
 mesh = SubResource("BoxMesh_feb8i")
 
-[node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(0.742923, -0.452216, 0.493524, 0, 0.737289, 0.675577, -0.669377, -0.501902, 0.547749, 1.56085, 1.39665, 1.02209)
-
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.606355, 0.506334, 0.613155, 0.363565, -0.509244, 0.780059, 0.707216, 0.695914, 0.124697, -2.79117, 0, 0)
+transform = Transform3D(-0.199892, -0.976799, -0.0768564, -0.0970444, -0.0583168, 0.99357, -0.975, 0.206065, -0.0831359, -1.61217, 0, -1.23089)
+shadow_enabled = true
+directional_shadow_blend_splits = true
+
+[node name="Player" parent="." instance=ExtResource("8_11ixh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.19781, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Player"]
+transform = Transform3D(0.999317, 0.0249678, -0.0272485, 0.00312273, 0.677608, 0.735416, 0.0368255, -0.734999, 0.677067, 0, 3.62691, 3.77035)
+
+[node name="Ground" type="StaticBody3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Ground"]
+material_override = SubResource("ShaderMaterial_11ixh")
+mesh = SubResource("PlaneMesh_ybq6y")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground"]
+shape = SubResource("WorldBoundaryShape3D_ybq6y")
+
+[node name="Line" type="Node3D" parent="."]
+script = ExtResource("9_20t1u")
+
+[node name="A" type="Marker3D" parent="Line"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.6068, -4.76837e-07, 1.21106)
+script = ExtResource("9_w078t")
+
+[node name="B" type="Marker3D" parent="Line"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.551147, 0, -2.71015)
+script = ExtResource("9_w078t")
+
+[connection signal="position_changed" from="Line/A" to="Line" method="_on_A_position_changed"]
+[connection signal="position_changed" from="Line/B" to="Line" method="_on_B_position_changed"]
